@@ -26,6 +26,7 @@ Crear un archivo .env (se puede tomar como base en archivo .env.example que se e
 - FILES: Ruta a la carpeta files (creada en el paso anterior).
 - MYSQL_PASSWORD: Contraseña para el usuario root de la base de datos.
 - FRONTEND_PORT: Puerto que se utilizara para exponer el frontend en el servidor.
+- BACKEND_PORT: Puerto que se utilizara para exponer el backend en el servidor.
 - DATABASE_URL: String para la conexión a la base de datos en el siguiente formato mysql://<username>:<password>@<host>/<database>?reconnect=true
 
 ## Ejecutar los contenedores
