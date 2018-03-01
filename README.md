@@ -52,8 +52,8 @@ El proyecto UFPS Training Center cuenta con los siguientes repositorios e imagen
 | javaSandbox  | java_image  |
 | pythonSandbox  | python_image  |
 | mariaDB  | mariadb:10.2  |
-| training-center-backend  |   |
-| training-center-frontend  |   |
+| training-center-backend  | backend  |
+| training-center-frontend  | frontend  |
 
 ## Despliegue en modo desarrollo
 
