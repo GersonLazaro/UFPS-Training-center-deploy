@@ -1,5 +1,7 @@
 # UFPS-Training-center-deploy
 
+Repositorio para el despliegue en modo producción de la plataforma UFPS Training center.
+
 ## Requisitos 
 
 - Docker CE
@@ -52,5 +54,24 @@ El proyecto UFPS Training Center cuenta con los siguientes repositorios e imagen
 | training-center-backend  |   |
 | training-center-frontend  |   |
 
+## Despliegue en modo desarrollo
+
+Para ejecutar los proyectos en modo desarrollo, recomendamos hacer uso de los siguientes respositorios:
+
+- [Backend](https://github.com/Meyito/training-center-ufps)
+- [Frontend](https://github.com/GersonLazaro/UFPS-Training-Center-Frontend)
+- [Calificador](https://github.com/Meyito/docker-grading)
+
+Cada uno de estos cuenta con sus propias instrucciones de instalación.
+
+## Información adicional
+
+El proyecto se encuentra desplegado en [ufpstrainingcenter.com](http://ufpstrainingcenter.com/#/iniciar-sesion)
+
+Para más información acerca del proyecto, por favor visitar nuestra [documentación oficial](http://ufpstrainingcenter.com/anexos/) 
+
+Para más información del grupo de estudio por favor visitar nuestros [repositorios](https://github.com/ProgramacionCompetitivaUFPS)
 
 
+
+Este proyecto fue construido con mucho :heart: y Javascript por [Melissa](https://github.com/Meyito) y [Gerson](https://github.com/GersonLazaro)
