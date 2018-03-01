@@ -9,6 +9,7 @@ FROM ubuntu:16.04
 
 # Container Basic Info 
 MAINTAINER GERSON LAZARO
+MAINTAINER MELISSA DELGADO
 
 # Update the repository sources list
 RUN apt-get -qq update

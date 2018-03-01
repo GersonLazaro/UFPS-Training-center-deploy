@@ -1,11 +1,35 @@
 version: '3'
 services:
+  frontend:
+    build: "frontend"
+    image: "frontend"
+    container_name: "training-center-frontend"
+    ports:
+      - "${FRONTEND_PORT}:80"
+    depends_on:
+      - backend
+
+  backend:
+    build: "backend"
+    image: "backend"
+    container_name: "training-center-backend"
+    volumes:
+      - "${FILES}:/files"
+    ports:
+      - "${BACKEND_PORT}:8080"
+    depends_on:
+      - db
+      - cpp
+      - java
+      - python
+
   db:
     image: "mariadb:10.2"
     restart: "always"
     environment:
       MYSQL_ROOT_PASSWORD: "${MYSQL_PASSWORD}"
     container_name: "mariaDB"
+
   cpp:
     build: "grading/cpp"
     image: "cpp_image"
@@ -13,6 +37,7 @@ services:
     volumes:
       - "${FILES}:/files"
     tty: true
+
   java:
     build: "grading/java"
     image: "java_image"
@@ -20,6 +45,7 @@ services:
     volumes:
       - "${FILES}:/files"
     tty: true
+
   python:
     build: "grading/python"
     image: "python_image"
