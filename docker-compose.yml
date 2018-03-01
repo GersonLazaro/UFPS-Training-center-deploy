@@ -1,0 +1,30 @@
+version: '3'
+services:
+  db:
+    image: "mariadb:10.2"
+    restart: "always"
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_PASSWORD}"
+    container_name: "mariaDB"
+  cpp:
+    build: "grading/cpp"
+    image: "cpp_image"
+    container_name: "cppSandbox"
+    volumes:
+      - "${FILES}:/files"
+    tty: true
+  java:
+    build: "grading/java"
+    image: "java_image"
+    container_name: "javaSandbox"
+    volumes:
+      - "${FILES}:/files"
+    tty: true
+  python:
+    build: "grading/python"
+    image: "python_image"
+    container_name: "pythonSandbox"
+    volumes:
+      - "${FILES}:/files"
+    tty: true
+
