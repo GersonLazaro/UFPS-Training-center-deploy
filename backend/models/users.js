@@ -90,6 +90,8 @@ module.exports = function (sequelize, DataTypes) {
           Users.hasMany( models.problems, {as: 'problems'})
           
           Users.hasMany( models.materials, {as: 'materials'})
+
+          Users.hasMany( models.submissions, {as: 'submissions'})
           
           Users.belongsToMany(models.syllabuses, {
             through: 'syllabus_students',

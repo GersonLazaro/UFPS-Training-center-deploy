@@ -1,9 +1,9 @@
 'use strict'
 
-const Contest = require('../models/contests')
-const ContestProblems = require('../models/contests_problems')
-const Problem = require('../models/problems')
-const User = require('../models/users')
+const Contest = require('../models').contests
+const ContestProblems = require('../models').contests_problems
+const Problem = require('../models').problems
+const User = require('../models').users
 const _ = require('lodash')
 const moment = require('moment')
 

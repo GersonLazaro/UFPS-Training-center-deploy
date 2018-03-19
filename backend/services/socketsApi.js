@@ -2,7 +2,7 @@
 
 const socket_io = require('socket.io');
 const io = socket_io();
-const User = require('../models/users')
+const User = require('../models').users
 let contest = io.of('/contest')
 let platform = io.of('/normal-mode')
 

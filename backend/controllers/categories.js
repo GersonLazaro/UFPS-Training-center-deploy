@@ -1,6 +1,6 @@
 'use strict'
 
-const Category = require('../models/categories')
+const Category = require('../models').categories
 const _ = require('lodash');
 
 /**

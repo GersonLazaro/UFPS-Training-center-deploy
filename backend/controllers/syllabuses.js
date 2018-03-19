@@ -1,9 +1,9 @@
 'use strict'
 
-const Syllabus = require('../models/syllabuses')
-const User = require('../models/users')
-const Assignment = require('../models/assignments')
-const Material = require('../models/materials')
+const Syllabus = require('../models').syllabuses
+const User = require('../models').users
+const Assignment = require('../models').assignments
+const Material = require('../models').materials
 const _ = require('lodash')
 
 /**

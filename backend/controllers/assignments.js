@@ -1,7 +1,7 @@
 'use strict'
 
-const Assignment = require('../models/assignments')
-const Problem = require('../models/problems')
+const Assignment = require('../models').assignments
+const Problem = require('../models').problems
 const _ = require('lodash')
 
 /**

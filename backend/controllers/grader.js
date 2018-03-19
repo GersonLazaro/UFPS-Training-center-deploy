@@ -1,7 +1,7 @@
 'use strict'
 
-const Problem = require('../models/problems')
-const Submission = require('../models/submissions')
+const Problem = require('../models').problems
+const Submission = require('../models').submissions
 const Sandbox = require('../grader/sandbox')
 const _ = require('lodash')
 const crypto = require ('crypto')

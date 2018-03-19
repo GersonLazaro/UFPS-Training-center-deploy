@@ -1,7 +1,7 @@
 'use strict'
 
 const authService = require('../services/authenticationService')
-const User = require('../models/users')
+const User = require('../models').users
 const Mailer = require('../services/mailer')
 const ViewRender = require('../services/renderTemplate')
 

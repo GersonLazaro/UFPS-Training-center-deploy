@@ -1,7 +1,8 @@
 module.exports = {
     development: {        
+        //url: 'mysql://root:root@127.0.0.1:3306/development',
         url: process.env.DATABASE_URL,
-        dialect: "mysql"
+        dialect: 'mysql'
     },
     production: {
         url: process.env.DATABASE_URL,

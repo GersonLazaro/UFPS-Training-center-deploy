@@ -10,8 +10,10 @@ const auth = require('../middlewares/auth')
  * Handler for '/users' routes
  */
 
-users.get('/', userCtrl.index )
+users.get('/', auth.isAuth, userCtrl.index )
 users.post('/', userCtrl.register )
-users.get('/:id/syllabus', userCtrl.getSyllabus )
+users.get('/:id/syllabus', auth.isAuth, userCtrl.getSyllabus )
+users.post('/remove-account', auth.isAuth, userCtrl.removeAccounts )
+users.get('/ranking', auth.isAuth, userCtrl.getRanking )
 
 module.exports = users;

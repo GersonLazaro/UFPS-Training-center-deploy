@@ -1,9 +1,9 @@
 'use strict'
 
-const Problem = require('../models/problems')
-const Submission = require('../models/submissions')
-const Category = require('../models/categories')
-const User = require('../models/users')
+const Problem = require('../models').problems
+const Submission = require('../models').submissions
+const Category = require('../models').categories
+const User = require('../models').users
 const Grader = require('../controllers/grader')
 const _ = require('lodash')
 const files = require('../services/files')

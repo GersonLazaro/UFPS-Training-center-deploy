@@ -3,7 +3,7 @@
 const jwt = require('jwt-simple')
 const moment = require('moment')
 const config = require('../config/config')
-const Blacklist = require('../models/blacklist_tokens')
+const Blacklist = require('../models').blacklist_tokens
 
 /**
  * Validates the authorization token authenticity 
