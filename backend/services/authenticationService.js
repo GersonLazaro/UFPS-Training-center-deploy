@@ -3,6 +3,7 @@
 const jwt = require('jwt-simple')
 const moment = require('moment')
 const config = require('../config/config')
+const app = require('../app');
 const Blacklist = require('../models').blacklist_tokens
 
 /**

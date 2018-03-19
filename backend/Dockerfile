@@ -17,6 +17,10 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm install --only=production
 
+#Define environment variables
+ENV PORT 8080
+ENV DEBUG *
+
 # Bundle app source
 COPY . .
 

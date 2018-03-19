@@ -1,5 +1,7 @@
 'use strict';
 
+const moment = require('moment')
+
 /**
  * Users Seeder
  */
@@ -20,8 +22,8 @@ module.exports = {
       password: '$2a$10$6LbPFQDH6/.N.Z4QBs/9puHZgRGfFOZppEa8pqNT9KOK0SiLfNSA.',
       type: 2,
       username: 'admin',
-      created_at: Date.now(),
-      updated_at: Date.now()
+      created_at: moment(),
+      updated_at: moment()
     }], {});
   },
 

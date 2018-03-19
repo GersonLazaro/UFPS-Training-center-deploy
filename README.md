@@ -75,5 +75,7 @@ Para más información acerca del proyecto, por favor visitar nuestra [documenta
 Para más información del grupo de estudio por favor visitar nuestros [repositorios](https://github.com/ProgramacionCompetitivaUFPS)
 
 
+docker exec -it training-center-backend /bin/bash
+
 
 Este proyecto fue construido con mucho :heart: y Javascript por [Melissa](https://github.com/Meyito) y [Gerson](https://github.com/GersonLazaro)

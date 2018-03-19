@@ -13,6 +13,10 @@ services:
     build: "backend"
     image: "backend"
     container_name: "training-center-backend"
+    environment:
+      - "NODE_ENV=${NODE_ENV}"
+      - "DATABASE_URL=${DATABASE_URL}"
+      - "SECRET_TOKEN=${SECRET_TOKEN}"
     volumes:
       - "${FILES}:/files"
     ports:
@@ -22,13 +26,16 @@ services:
       - cpp
       - java
       - python
-
+    
   db:
     image: "mariadb:10.2"
     restart: "always"
     environment:
-      MYSQL_ROOT_PASSWORD: "${MYSQL_PASSWORD}"
+      - "MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}"
+      - "MYSQL_DATABASE=development"
     container_name: "mariaDB"
+    ports:
+      - "${DATABASE_PORT}:3306"
 
   cpp:
     build: "grading/cpp"
