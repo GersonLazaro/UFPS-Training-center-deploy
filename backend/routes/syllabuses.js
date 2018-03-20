@@ -5,6 +5,7 @@ const syllabuses = express.Router()
 const syllabusesCtrl = require('../controllers/syllabuses')
 const auth = require('../middlewares/auth')
 const materialsCtrl = require('../controllers/materials')
+const statisticsCtrl = require('../controllers/statistics')
 
 /**
  * Handler for '/syllabus' routes
@@ -20,5 +21,6 @@ syllabuses.get('/:id/materials', auth.isAuth, syllabusesCtrl.getMaterials )
 syllabuses.post('/:id/remove-materials', auth.isAuth, syllabusesCtrl.removeMaterialsFromSyllabus )
 syllabuses.post('/:id/register', auth.isAuth, syllabusesCtrl.registerStudent )
 syllabuses.post('/:id/delete-students', auth.isAuth, syllabusesCtrl.removeStudents )
+syllabuses.get('/:id/ranking', auth.isAuth, statisticsCtrl.getSyllabusRanking )
 
 module.exports = syllabuses;

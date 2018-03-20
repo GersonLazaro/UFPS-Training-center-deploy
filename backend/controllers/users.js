@@ -5,8 +5,7 @@ const Submissions = require('../models').submissions
 const Syllabus = require('../models').syllabuses
 const authService = require('../services/authenticationService')
 const _ = require('lodash');
-const Sequelize = require('sequelize');
-var sequelize = new Sequelize('development', 'root', 'root');
+
 /**
  * Users controller 
  */
@@ -164,43 +163,11 @@ function getSyllabus (req,res){
   })
 }
 
-function getRanking(req, res) {
-  let limit = (req.query.limit) ? parseInt(req.query.limit) : 10
-  let offset = (req.query.page) ? limit * ( parseInt(req.query.page) - 1 ) : 0
-
-  let condition = {}
-  let meta = {}
-
-  if( req.query.type )
-      condition.type = req.query.type
-  else
-      condition.id = { $ne: null }
-      
-  sequelize.query(
-    'SELECT u.username, COUNT(s.problem_id) as total, '
-    +'(SELECT COUNT( DISTINCT(problem_id) ) '
-    +'FROM submissions '
-    +'WHERE verdict="Accepted" '
-    +'AND s.assignment_problem_id IS NULL '
-    +'AND s.contest_problem_id IS NULL '
-    +'AND user_id = u.id) as accepted '
-    +'FROM users u, submissions s '
-    +'WHERE s.user_id = u.id '
-    +'AND s.assignment_problem_id IS NULL '
-    +'AND s.contest_problem_id IS NULL',
-    { type: Sequelize.QueryTypes.SELECT}
-  ).then( users => {
-    console.log( users )
-    return res.status(200).send(users)
-  })
-}
-
 module.exports = {
   index,
   register,
   signUp,
   recovery,
   getSyllabus,
-  removeAccounts,
-  getRanking
+  removeAccounts
 }

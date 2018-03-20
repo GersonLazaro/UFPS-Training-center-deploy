@@ -19,6 +19,7 @@ contests.post('/:id/problems', auth.isAuth, contestsCtrl.addProblems )
 contests.post('/:id/remove-problems', auth.isAuth, contestsCtrl.removeProblems )
 contests.post('/:id/register', auth.isAuth, contestsCtrl.registerStudent )
 contests.post('/:id/unregister', auth.isAuth, contestsCtrl.removeStudent )
+contests.get('/:id/is-register', auth.isAuth, contestsCtrl.isRegister )
 
 contests.get('/:id/results', auth.isAuth, contestsCtrl.getScoreboard )
 

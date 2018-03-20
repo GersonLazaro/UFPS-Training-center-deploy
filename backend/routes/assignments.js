@@ -3,6 +3,7 @@
 const express = require('express')
 const Assignments = express.Router()
 const assignmentsCtrl = require('../controllers/assignments')
+const statisticsCtrl = require('../controllers/statistics')
 const auth = require('../middlewares/auth')
 
 /**
@@ -15,5 +16,6 @@ Assignments.delete('/:id', auth.isAuth, assignmentsCtrl.remove )
 Assignments.get('/:id', auth.isAuth, assignmentsCtrl.get )
 Assignments.post('/:id/add-problems', auth.isAuth, assignmentsCtrl.addProblems )
 Assignments.post('/:id/remove-problems', auth.isAuth, assignmentsCtrl.deleteProblems )
+Assignments.get('/:id/results', auth.isAuth, statisticsCtrl.getAssignmentResult )
 
 module.exports = Assignments;

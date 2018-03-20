@@ -9,8 +9,6 @@ const cors = require('cors')
 
 const app = express()
 const api = require('./routes')
-const env = require('node-env-file')
-env('./.env')
 
 app.use(logger('dev'))
 app.use(bodyParser.json())

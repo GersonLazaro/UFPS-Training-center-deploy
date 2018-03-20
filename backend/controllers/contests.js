@@ -4,6 +4,7 @@ const Contest = require('../models').contests
 const ContestProblems = require('../models').contests_problems
 const Problem = require('../models').problems
 const User = require('../models').users
+const ContestStudent = require('../models').contests_students
 const _ = require('lodash')
 const moment = require('moment')
 
@@ -293,6 +294,17 @@ function list(req, res) {
         else condition.public = true
     }
 
+    if( req.query.status ){
+        if( req.query.status == 'running'){
+            condition.init_date = { $lte: moment() }
+            condition.end_date = { $gte: moment() }
+        }else if( req.query.status == 'past' ){
+            condition.end_date = { $lt: moment() }
+        }else{
+            condition.init_date = { $gt: moment() }
+        }
+    }
+
     Contest.findAndCountAll({
         where: condition,
         include: [ 
@@ -303,7 +315,10 @@ function list(req, res) {
         ],
         attributes: ['id', 'title', 'description', 'init_date', 'end_date', 'rules', 'public', 'key'],
         limit: limit,
-        offset: offset
+        offset: offset,
+        order: [
+            ['init_date', 'DESC']
+        ]
     }).then( ( response ) => {
         meta.totalPages = Math.ceil( response.count / limit )
         meta.totalItems = response.count
@@ -313,6 +328,27 @@ function list(req, res) {
         }
         res.status(200).send({ meta: meta, data: response.rows })
     }).catch((err) => {
+        return res.status(500).send({ error: `${err}` })
+    })
+}
+
+function isRegister (req,res){
+    if( !req.query.student )
+        return res.status(400).send({ error: 'Datos incompletos' })
+
+    ContestStudent.findOne({
+        where: {
+            contest_id: req.params.id,
+            user_id: req.query.student
+        },
+        attributes: ['id']
+    }).then( response => {
+        let status = 'registered';
+
+        if( !response ) status = 'unregistered'
+        return res.status(200).send({ status: status })
+    })
+    .catch( (err) => {
         return res.status(500).send({ error: `${err}` })
     })
 }
@@ -328,5 +364,6 @@ module.exports = {
     addProblems,
     removeProblems,
     registerStudent,
-    removeStudent
+    removeStudent,
+    isRegister
 }

@@ -16,7 +16,7 @@ function isAuth(req, res, next) {
     if (!req.headers.authorization) {
         return res.status(401).send({ error: 'No se encuentra autorizado' })
     }
-
+    
     try {
         const token = req.headers.authorization.split(" ")[1]
         const payload = jwt.decode(token, config.SECRET_TOKEN)

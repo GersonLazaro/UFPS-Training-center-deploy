@@ -4,6 +4,7 @@ const Syllabus = require('../models').syllabuses
 const User = require('../models').users
 const Assignment = require('../models').assignments
 const Material = require('../models').materials
+const SyllabusStudent = require('../models').syllabus_students
 const _ = require('lodash')
 
 /**
@@ -274,6 +275,40 @@ function removeStudents (req,res){
     })
 }
 
+function hasPermission ( user, syllabus_id, cb ){
+    if( user.usertype == 1 ){
+        Syllabus.findOne({
+            where: {
+                id: syllabus_id,
+                user_id: user.sub
+            },
+            attributes: ['id']
+        }).then( response => {
+            if( !response ) cb( null, false )
+            cb( null, true )
+        })
+        .catch( (err) => {
+            cb( err, null )
+        })
+    }else{
+        SyllabusStudent.findOne({
+            where: {
+                syllabus_id: syllabus_id,
+                user_id: user.sub
+            },
+            attributes: ['id']
+        }).then( response => {
+            if( !response ) cb( null, false )
+            cb( null, true )
+        })
+        .catch( (err) => {
+            cb( err, null )
+        })
+    }
+}
+
+
+
 module.exports = {
     create,
     get,
@@ -284,5 +319,6 @@ module.exports = {
     getMaterials,
     removeMaterialsFromSyllabus,
     registerStudent,
-    removeStudents
+    removeStudents,
+    hasPermission
 }

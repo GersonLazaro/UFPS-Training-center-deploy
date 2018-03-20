@@ -263,9 +263,12 @@ function submit(req, res) {
     req.body.file_path = req.files['code'][0].path
     req.body.status = 'in queue'
 
+    let isContest = false
+    if( req.body.contest_problem_id ) isContest = true
+
     Submission.create( req.body )
         .then(submission => {
-            Grader.judge( submission.id )
+            Grader.judge( submission.id, isContest )
             return res.status(200).send(submission)
         })
         .catch(error => {

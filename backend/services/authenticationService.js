@@ -2,8 +2,7 @@
 
 const jwt = require('jwt-simple')
 const moment = require('moment')
-const config = require('../config/config')
-const app = require('../app');
+const config = require('../config/config.js')
 const Blacklist = require('../models').blacklist_tokens
 
 /**
@@ -23,7 +22,7 @@ function createToken(user) {
         iat: moment().unix(),
         exp: moment().add(7, 'days').unix()
     }
-
+    
     return jwt.encode( payload, config.SECRET_TOKEN )
 }
 

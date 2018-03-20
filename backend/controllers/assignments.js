@@ -1,6 +1,8 @@
 'use strict'
 
 const Assignment = require('../models').assignments
+const SyllabusStudents = require('../models').syllabus_students
+const Syllabus = require('../models').syllabuses
 const Problem = require('../models').problems
 const _ = require('lodash')
 
@@ -137,11 +139,31 @@ function deleteProblems (req,res){
     })
 }
 
+function isOwner ( user, assignment_id, cb ){
+    Assignment.findOne({
+        include: [{ 
+            model: Syllabus, 
+            where: { user_id: user.sub }, 
+            attributes: ['id'] 
+        }],
+        where:{
+            id: assignment_id
+        },
+        attributes: ['id']
+    }).then( response => {
+        if( !response ) cb( null, false )
+        cb( null, true )
+    }).catch( (err) => {
+        cb( err, null )
+    })
+}
+
 module.exports = {
     create,
     remove,
     get,
     update,
     addProblems,
-    deleteProblems
+    deleteProblems,
+    isOwner
 }
