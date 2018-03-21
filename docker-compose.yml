@@ -19,6 +19,7 @@ services:
       - "SECRET_TOKEN=${SECRET_TOKEN}"
     volumes:
       - "${FILES}:/usr/src/app/files"
+      - "/var/run/docker.sock:/var/run/docker.sock"
     ports:
       - "${BACKEND_PORT}:8080"
     depends_on:
