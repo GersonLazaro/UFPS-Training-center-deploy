@@ -45,7 +45,6 @@ function judge( submission_id, contest ) {
             //VALIDAR QUE LOS CONTENEDORES ESTEN ARRIBA!!! ANTES DE ENVIAR A EJECUTAR
             updateStatus( submission_id, { status: 'running'} )
 
-            console.log("ENVIANDO A EJECUTAR");
             execution.run( (verdict, executionTime) => {
                 console.log( verdict )
                 let data = {
