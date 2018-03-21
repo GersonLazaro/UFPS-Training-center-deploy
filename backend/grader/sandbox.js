@@ -67,11 +67,12 @@ class Sandbox {
     let container = this.config.containers[this.languageId]
     let ins = 'docker exec ' + container + ' ' + compiler
 
-    //console.log( ins )
+    console.log( ins )
     exec(ins, (error, stdout, stderr) => {
       if (error) {
+        console.log(eror)
         success('Compilation Error', '0')
-        this.removeExecutionFolder()
+        //this.removeExecutionFolder()
         return
       }
       exec('docker exec ' + container + ' /files/' + this.folder + '/' + this.runner + '  ' + this.timeLimit, (error, stdout, stderr) => {
@@ -91,7 +92,7 @@ class Sandbox {
           this.removeExecutionFolder()
         } else if (ans === 'Runtime') {
           success('Runtime Error', execTime)
-          this.removeExecutionFolder()
+          //this.removeExecutionFolder()
         } else this.validateOutput(execTime, success)
       })
     })
@@ -101,7 +102,7 @@ class Sandbox {
     exec('diff ' + path.join(this.execution_directory, 'output.out') + ' ' + path.join(this.execution_directory, this.output_filename), (error, stdout, stderr) => {
       if (error) success('Wrong Answer', execTime)
       else success('Accepted', execTime)
-      this.removeExecutionFolder()
+      //this.removeExecutionFolder()
     })
   }
 
