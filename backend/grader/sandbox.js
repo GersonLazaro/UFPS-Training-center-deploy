@@ -37,11 +37,11 @@ class Sandbox {
       ' && cp ' + path.join(this.path, this.output) + ' ' + this.execution_directory + /* Copia el output del problema */
       ' && cp ' + path.join(this.path, this.file_path) + ' ' + this.execution_directory + /* Copia el source del usuario */
       ' && mv ' + this.execution_directory + '/' + this.file_name + ' ' + this.execution_directory + '/' + this.fileName + /* Renombrar el fuente para poderlo ejecutar */
-      " && sed -i '' 's/{TL}/" + this.timeLimit + "/g' " + this.execution_directory + '/' + this.runner + /* Reemplazo del TL en el script de shell  */
-      " && sed -i '' 's/{path}/\\/files\\/" + this.folder + '\\/' + "/g' " + this.execution_directory + '/' + this.runner + /* Reemplazo del path del archivo a ejecutar en el script de shell  */
-      " && sed -i '' 's/{code}/" + this.executionFile + "/g' " + this.execution_directory + '/' + this.runner + /* Reemplazo del archivo a ejecutar en el script de shell  */
-      " && sed -i '' 's/{input}/\\/files\\/" + this.folder + '\\/' + this.input_filename + "/g' " + this.execution_directory + '/' + this.runner + /* Reemplazo del archivo de entradas en el script de shell  */
-      " && sed -i '' 's/{folder}/" + this.folder + "/g' " + this.execution_directory + '/' + this.runner /* Reemplazo de la carpeta en el script de shell  */
+      " && sed -i 's/{TL}/" + this.timeLimit + "/g' " + this.execution_directory + '/' + this.runner + /* Reemplazo del TL en el script de shell  */
+      " && sed -i 's/{path}/\\/files\\/" + this.folder + '\\/' + "/g' " + this.execution_directory + '/' + this.runner + /* Reemplazo del path del archivo a ejecutar en el script de shell  */
+      " && sed -i 's/{code}/" + this.executionFile + "/g' " + this.execution_directory + '/' + this.runner + /* Reemplazo del archivo a ejecutar en el script de shell  */
+      " && sed -i 's/{input}/\\/files\\/" + this.folder + '\\/' + this.input_filename + "/g' " + this.execution_directory + '/' + this.runner + /* Reemplazo del archivo de entradas en el script de shell  */
+      " && sed -i 's/{folder}/" + this.folder + "/g' " + this.execution_directory + '/' + this.runner /* Reemplazo de la carpeta en el script de shell  */
       , (error, stdout, stderr) => {
             if (error) {
                 console.log( stderr )
