@@ -18,7 +18,7 @@ services:
       - "DATABASE_URL=${DATABASE_URL}"
       - "SECRET_TOKEN=${SECRET_TOKEN}"
     volumes:
-      - "${FILES}:/files"
+      - "${FILES}:/usr/src/app/files"
     ports:
       - "${BACKEND_PORT}:8080"
     depends_on:
