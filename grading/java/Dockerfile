@@ -28,3 +28,6 @@ RUN apt-get install -y oracle-java8-installer
 RUN apt-get install -y sudo
 RUN apt-get install -y bc
 
+#ENVIRONMENT
+ENV _JAVA_OPTIONS=Xmx512M
+
