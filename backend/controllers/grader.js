@@ -71,7 +71,8 @@ function getSubmissionData( submission_id, cb ){
             problem_id: submission.problem_id,
             file_name: submission.file_name,
             file_path: submission.file_path,
-            language: submission.language
+            language: submission.language,
+            user_id: submission.user_id
         }
         cb( data )
     }).catch( (err) => {
