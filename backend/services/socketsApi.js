@@ -17,6 +17,7 @@ contest.on('connection', function(socket) {
 platform.on('connection', function(socket){
     socket.on('register', function( user_id ){
         addSocket( user_id, socket.id )
+        console.log( 'Socket: ' + socket.id )
     })
     console.log('User in normal mode')
 });
@@ -54,7 +55,10 @@ function getSocket( user_id, success ){
     .then( (user) => {
         success( user.socket_id )
     })
-    .catch( (err) => {})
+    .catch( (err) => {
+        console.log("Heyyy i'm an error")
+        console.log( err )
+    })
 }
 
 module.exports = socketApi;

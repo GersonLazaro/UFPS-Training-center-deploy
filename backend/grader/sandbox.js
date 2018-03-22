@@ -67,7 +67,7 @@ class Sandbox {
     let container = this.config.containers[this.languageId]
     let ins = 'docker exec ' + container + ' ' + compiler
 
-    //console.log( ins )
+    console.log( ins )
     exec(ins, (error, stdout, stderr) => {
       if (error) {
         success('Compilation Error', '0')

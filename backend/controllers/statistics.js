@@ -89,7 +89,7 @@ function getSyllabusRanking(req, res) {
               return res.status(200).send( { meta } )
             
             sequelize.query(
-              'SELECT u.username, '
+              'SELECT u.name, '
               +'COUNT( syllabus_submissions.assignment_problem_id ) as total, '
               +'( '
                 +' SELECT COUNT( DISTINCT(s.assignment_problem_id) ) '
