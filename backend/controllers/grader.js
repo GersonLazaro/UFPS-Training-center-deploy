@@ -14,7 +14,8 @@ const socket = require('../services/socketsApi')
 
 function judge( submission_id, contest ) {
     getSubmissionData( submission_id, (res) =>{
-        var data = res
+        let data = res
+        var socket_data = res
         getProblemData( data, () => {
             //url de la ruta donde se almaceno el archivo desde /files
             var n = data.file_path.indexOf('/files')
@@ -44,7 +45,7 @@ function judge( submission_id, contest ) {
 
             //VALIDAR QUE LOS CONTENEDORES ESTEN ARRIBA!!! ANTES DE ENVIAR A EJECUTAR
             updateStatus( submission_id, { status: 'running'} )
-            console.log( data )
+            console.log( socket_data )
             execution.run( (verdict, executionTime) => {
                 let ans = {
                     status: 'executed',
@@ -53,9 +54,9 @@ function judge( submission_id, contest ) {
                 }
                 updateStatus( submission_id, ans )
                 //user, problem, verdict, sumission_id
-                if( contest ) socket.refreshScoreboard( data.user_id, data.problem_id, ans.verdict, submission_id )
+                if( contest ) socket.refreshScoreboard( socket_data.user_id, socket_data.problem_id, ans.verdict, submission_id )
                 //user, problem, verdict
-                else socket.notifySubmissionResult( data.user_id, data.problem_id, ans.verdict )
+                else socket.notifySubmissionResult( socket_data.user_id, socket_data.problem_id, ans.verdict )
             })
         })
     })
