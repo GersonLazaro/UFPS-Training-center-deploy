@@ -101,6 +101,7 @@ function getSocket( user_id, success ){
     User.findById( user_id )
     .then( (user) => {
         console.log( user )
+        console.log( user.socket_id )
         success( user.socket_id )
     })
     .catch( (err) => {
