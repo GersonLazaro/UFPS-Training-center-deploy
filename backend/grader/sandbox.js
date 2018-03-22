@@ -107,9 +107,9 @@ class Sandbox {
   
 
   removeExecutionFolder () {
-    exec(
-      'rm -rf ' + this.execution_directory /* Elimina la carpeta temporal de la ejecución */
-    )
+    /*exec(
+      'rm -rf ' + this.execution_directory 
+    )*/
   }
 }
 
