@@ -48,6 +48,7 @@ function addSocket( user_id, socket_id ){
         { where: { id: user_id } }
     ).then((affectedRows) => {
     }).catch((err) => {
+        console.log('ERRROOOOOOOR: ' + err)
     })
 }
 
