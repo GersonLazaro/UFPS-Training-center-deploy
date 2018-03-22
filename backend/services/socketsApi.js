@@ -55,6 +55,7 @@ function addSocket( user_id, socket_id ){
 function getSocket( user_id, success ){
     User.findById( user_id )
     .then( (user) => {
+        console.log( user )
         success( user.socket_id )
     })
     .catch( (err) => {
