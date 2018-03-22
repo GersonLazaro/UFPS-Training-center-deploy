@@ -159,9 +159,9 @@ function getAssignmentResult(req, res) {
           return res.status(200).send( { meta } )
         
         sequelize.query(
-          'SELECT u.id, u.username, u.code, u.name, solved_problems.assignment_problem_id '
+          'SELECT u.id, u.username, u.code, u.name, solved_problems.assignment_problem_id, solved_problems.problem_id  '
           +'FROM syllabus_students ss LEFT JOIN '
-          +'( 	SELECT s.user_id, s.assignment_problem_id '
+          +'( 	SELECT s.user_id, s.assignment_problem_id, s.problem_id '
             +'FROM submissions s, assignment_problems ap '
             +'WHERE s.assignment_problem_id = ap.id '
             +'AND ap.assignment_id = ' + req.params.id + ' '
