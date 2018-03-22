@@ -57,7 +57,7 @@ socketApi.notifySubmissionResult = function( user_id, problem_id, verdict ){
                 +'**********************************************'
             )
     getSocket( user_id, ( socket_id ) => {
-        console.log( 'Socket ENVIO: ' + socket.id )
+        console.log( 'Socket ENVIO: ' + socket_id )
         platform.to(socket_id).emit('new result',{
             user_id: user_id,
             problem_id: problem_id,
