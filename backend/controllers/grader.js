@@ -54,9 +54,9 @@ function judge( submission_id, contest ) {
                 }
                 updateStatus( submission_id, ans )
                 //user, problem, verdict, sumission_id
-                if( contest ) socket.refreshScoreboard( socket_data.user_id, socket_data.problem_id, ans.verdict, submission_id )
+                if( contest ) socket.refreshScoreboard( socket_data.user_id, socket_data.problem_id, ans.verdict, submission_id, "Hola mundo" )
                 //user, problem, verdict
-                else socket.notifySubmissionResult( socket_data.user_id, socket_data.problem_id, ans.verdict )
+                else socket.notifySubmissionResult( socket_data.user_id, socket_data.problem_id, ans.verdict, "No pongas un / de más al hacer la conexión a la sala :)" )
             })
         })
     })
