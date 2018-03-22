@@ -70,6 +70,8 @@ class Sandbox {
     console.log( ins )
     exec(ins, (error, stdout, stderr) => {
       if (error) {
+        console.log(error)
+        console.log(stderr)
         success('Compilation Error', '0')
         return
       }
