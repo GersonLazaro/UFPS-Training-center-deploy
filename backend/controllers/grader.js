@@ -14,7 +14,7 @@ const socket = require('../services/socketsApi')
 
 function judge( submission_id, contest ) {
     getSubmissionData( submission_id, (res) =>{
-        let data = res
+        var data = res
         getProblemData( data, () => {
             //url de la ruta donde se almaceno el archivo desde /files
             var n = data.file_path.indexOf('/files')
