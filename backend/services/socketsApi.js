@@ -44,7 +44,7 @@ platform.on('connection', function(socket){
     console.log('User in normal mode')
 });
 
-socketApi.notifySubmissionResult = function( user_id, problem_id, verdict ){
+socketApi.notifySubmissionResult = function( user_id, problem_id, verdict, problem_name ){
     console.log('***********************************************'
                 +'**********************************************'
                 +'**********************************************'
@@ -61,12 +61,13 @@ socketApi.notifySubmissionResult = function( user_id, problem_id, verdict ){
         platform.to(socket_id).emit('new result',{
             user_id: user_id,
             problem_id: problem_id,
-            verdict: verdict
+            verdict: verdict,
+            problem_name: problem_name
         })
     })
 }
 
-socketApi.refreshScoreboard = function( user_id, problem_id, verdict, submission_id ){
+socketApi.refreshScoreboard = function( user_id, problem_id, verdict, submission_id, problem_name ){
     console.log('***********************************************'
                 +'**********************************************'
                 +'**********************************************'
@@ -82,7 +83,8 @@ socketApi.refreshScoreboard = function( user_id, problem_id, verdict, submission
         user_id: user_id,
         problem_id: problem_id,
         verdict: verdict,
-        submission_id: submission_id
+        submission_id: submission_id, 
+        problem_name: problem_name
     })
 }
 
