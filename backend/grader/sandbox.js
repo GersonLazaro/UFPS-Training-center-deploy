@@ -74,6 +74,8 @@ class Sandbox {
         return
       }
       exec('docker exec ' + container + ' /files/' + this.folder + '/' + this.runner + '  ' + this.timeLimit, (error, stdout, stderr) => {
+        console.log(error)
+        console.log(stderr)
         let ans = stdout.split('\n')[0]
         let tmp = stderr.split('\n')
         let execTime
