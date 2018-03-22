@@ -46,17 +46,16 @@ function judge( submission_id, contest ) {
             updateStatus( submission_id, { status: 'running'} )
 
             execution.run( (verdict, executionTime) => {
-                console.log( verdict )
-                let data = {
+                let ans = {
                     status: 'executed',
                     execution_time: executionTime,
                     verdict: verdict
                 }
-                updateStatus( submission_id, data )
+                updateStatus( submission_id, ans )
                 //user, problem, verdict, sumission_id
-                if( contest ) socket.refreshScoreboard(1,1,'Wrong Answer', 1)
+                if( contest ) socket.refreshScoreboard( data.user_id, data.problem_id, ans.verdict, submission_id )
                 //user, problem, verdict
-                else socket.notifySubmissionResult( 1, 1, 'Acc')
+                else socket.notifySubmissionResult( data.user_id, data.problem_id, ans.verdict )
             })
         })
     })
@@ -65,7 +64,7 @@ function judge( submission_id, contest ) {
 function getSubmissionData( submission_id, cb ){
     Submission.findOne({
         where: { id: submission_id },
-        attributes: ['problem_id', 'file_name', 'file_path', 'language']
+        attributes: ['problem_id', 'file_name', 'file_path', 'language', 'user_id']
     }).then( ( submission ) =>{
         let data = {
             problem_id: submission.problem_id,
