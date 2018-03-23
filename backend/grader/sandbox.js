@@ -23,19 +23,14 @@ class Sandbox {
     this.configureLanguage()
   }
 
-  checkStatus( ){
+  checkStatus( cb ){
     let container = this.config.containers[this.languageId]
     let ins = 'docker exec ' + container + ' ls '
-    console.log('***********************'
-              +'BUENASSSSSS*********')
 
-    let status = false
     exec( ins, (error, stdout, stderr) => {
-      if (error)   status = false
-      status = true
+      if (error)   cb( false )
+      cb( true )
     })
-    console.log('VALIDOOOOOO')
-    return status
   }
   
   run (success) {
