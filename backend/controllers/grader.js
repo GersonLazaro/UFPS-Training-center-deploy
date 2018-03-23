@@ -15,7 +15,7 @@ const socket = require('../services/socketsApi')
 function judge( submission_id, contest ) {
     getSubmissionData( submission_id, (res) =>{
         let data = res
-        var socket_data = res
+        
         getProblemData( data, () => {
             //url de la ruta donde se almaceno el archivo desde /files
             var n = data.file_path.indexOf('/files')
@@ -54,9 +54,9 @@ function judge( submission_id, contest ) {
                 }
                 updateStatus( submission_id, ans )
                 //user, problem, verdict, sumission_id
-                if( contest ) socket.refreshScoreboard( socket_data.user_id, socket_data.problem_id, ans.verdict, submission_id, "Hola mundo" )
+                if( contest ) socket.refreshScoreboard( data.user_id, data.problem_id, ans.verdict, submission_id, data.problem_title )
                 //user, problem, verdict
-                else socket.notifySubmissionResult( socket_data.user_id, socket_data.problem_id, ans.verdict, "No pongas un / de más al hacer la conexión a la sala :)" )
+                else socket.notifySubmissionResult( data.user_id, data.problem_id, ans.verdict, data.problem_title )
             })
         })
     })
@@ -83,11 +83,13 @@ function getSubmissionData( submission_id, cb ){
 function getProblemData( data, cb ){
     Problem.findOne({
         where: { id: data.problem_id },
-        attributes: ['input', 'output', 'time_limit']
+        attributes: ['input', 'output', 'time_limit', 'title_es', 'title_en']
     }).then( ( problem ) =>{
         data.input = problem.input
         data.output = problem.output
         data.time_limit = problem.time_limit
+        if( title_en )  data.problem_title = title_en
+        else data.problem_title = title_es
         cb()
     }).catch( (err) => {
         console.log( "Error trayendo el problema")
