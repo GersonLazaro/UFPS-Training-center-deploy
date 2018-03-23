@@ -44,6 +44,7 @@ function judge( submission_id, contest ) {
             )
 
             execution.checkStatus( ( status ) => {
+                
                 if( status ){
                     console.log( "************** CONTENEDOR EJECUTANDOSE **********")
                     updateStatus( submission_id, { status: 'running'} )

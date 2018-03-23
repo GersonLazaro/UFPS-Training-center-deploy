@@ -31,7 +31,10 @@ class Sandbox {
       console.log( error )
       console.log( stdout )
       console.log( stderr )
-      if (error)   cb( false )
+      if (error){
+        cb( false )
+        return 
+      }
       cb( true )
     })
   }
