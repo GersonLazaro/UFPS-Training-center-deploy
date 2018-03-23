@@ -28,6 +28,9 @@ class Sandbox {
     let ins = 'docker exec ' + container + ' ls '
 
     exec( ins, (error, stdout, stderr) => {
+      console.log( error )
+      console.log( stdout )
+      console.log( stderr )
       if (error)   cb( false )
       cb( true )
     })

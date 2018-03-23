@@ -43,8 +43,9 @@ function judge( submission_id, contest ) {
                 output_filename
             )
 
-            execution.checkStatus( ( status ) =>{
+            execution.checkStatus( ( status ) => {
                 if( status ){
+                    console.log( "************** CONTENEDOR EJECUTANDOSE **********")
                     updateStatus( submission_id, { status: 'running'} )
                 
                     execution.run( (verdict, executionTime) => {
@@ -60,6 +61,7 @@ function judge( submission_id, contest ) {
                         else socket.notifySubmissionResult( data.user_id, data.problem_id, ans.verdict, data.problem_title )
                     })
                 }
+                console.log( "************** CONTENEDOR NO EN EJECUCION **********")
             })
         })
     })
