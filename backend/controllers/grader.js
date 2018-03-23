@@ -43,21 +43,22 @@ function judge( submission_id, contest ) {
                 output_filename
             )
 
-            //VALIDAR QUE LOS CONTENEDORES ESTEN ARRIBA!!! ANTES DE ENVIAR A EJECUTAR
-            updateStatus( submission_id, { status: 'running'} )
-            
-            execution.run( (verdict, executionTime) => {
-                let ans = {
-                    status: 'executed',
-                    execution_time: executionTime,
-                    verdict: verdict
-                }
-                updateStatus( submission_id, ans )
-                //user, problem, verdict, sumission_id
-                if( contest ) socket.refreshScoreboard( data.user_id, data.problem_id, ans.verdict, submission_id, data.problem_title )
-                //user, problem, verdict
-                else socket.notifySubmissionResult( data.user_id, data.problem_id, ans.verdict, data.problem_title )
-            })
+            if ( execution.checkStatus() ) {
+                updateStatus( submission_id, { status: 'running'} )
+                
+                execution.run( (verdict, executionTime) => {
+                    let ans = {
+                        status: 'executed',
+                        execution_time: executionTime,
+                        verdict: verdict
+                    }
+                    updateStatus( submission_id, ans )
+                    //user, problem, verdict, sumission_id
+                    if( contest ) socket.refreshScoreboard( data.user_id, data.problem_id, ans.verdict, submission_id, data.problem_title )
+                    //user, problem, verdict
+                    else socket.notifySubmissionResult( data.user_id, data.problem_id, ans.verdict, data.problem_title )
+                })
+            }
         })
     })
 }
@@ -92,7 +93,6 @@ function getProblemData( data, cb ){
         else data.problem_title = problem.title_es
         cb()
     }).catch( (err) => {
-        console.log(err)
         console.log( "Error trayendo el problema")
     } )
 }

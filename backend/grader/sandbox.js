@@ -19,8 +19,21 @@ class Sandbox {
     this.path = path.dirname(__dirname)
     this.execution_directory = path.join( this.path, 'files', folder )
     this.config = new Config()
+
+    this.configureLanguage()
   }
 
+  checkStatus( ){
+    let container = this.config.containers[this.languageId]
+    let ins = 'docker exec ' + container + ' ls '
+
+    //console.log( ins )
+    exec( ins, (error, stdout, stderr) => {
+      if (error)   return false
+      return true
+    })
+  }
+  
   run (success) {
     this.setUpEnvironment(() => {
       this.execute(success)
@@ -28,7 +41,6 @@ class Sandbox {
   }
 
   setUpEnvironment (success) {
-    this.configureLanguage()
     exec(
       'mkdir ' + this.execution_directory + /* Crea la carpeta temporal */
       ' && cp ' + path.join(__dirname, 'util', this.runner) + ' ' + this.execution_directory + /* Copia los scripts al directorio */
@@ -112,9 +124,9 @@ class Sandbox {
   
 
   removeExecutionFolder () {
-    /*exec(
+    exec(
       'rm -rf ' + this.execution_directory 
-    )*/
+    )
   }
 }
 
