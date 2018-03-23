@@ -12,6 +12,7 @@ services:
   backend:
     build: "backend"
     image: "backend"
+    restart: "always"
     container_name: "training-center-backend"
     environment:
       - "NODE_ENV=${NODE_ENV}"
@@ -49,6 +50,7 @@ services:
   java:
     build: "grading/java"
     image: "java_image"
+    restart: "always"
     container_name: "javaSandbox"
     volumes:
       - "${FILES}:/files"
@@ -57,6 +59,7 @@ services:
   python:
     build: "grading/python"
     image: "python_image"
+    restart: "always"
     container_name: "pythonSandbox"
     volumes:
       - "${FILES}:/files"
