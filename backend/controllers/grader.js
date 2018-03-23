@@ -88,8 +88,8 @@ function getProblemData( data, cb ){
         data.input = problem.input
         data.output = problem.output
         data.time_limit = problem.time_limit
-        if( title_en )  data.problem_title = title_en
-        else data.problem_title = title_es
+        if( title_en )  data.problem_title = problem.title_en
+        else data.problem_title = problem.title_es
         cb()
     }).catch( (err) => {
         console.log( "Error trayendo el problema")
