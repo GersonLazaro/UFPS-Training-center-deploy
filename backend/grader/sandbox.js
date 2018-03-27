@@ -28,9 +28,6 @@ class Sandbox {
     let ins = 'docker exec ' + container + ' ls '
 
     exec( ins, (error, stdout, stderr) => {
-      console.log( error )
-      console.log( stdout )
-      console.log( stderr )
       if (error){
         cb( false )
         return 
@@ -84,7 +81,7 @@ class Sandbox {
     let container = this.config.containers[this.languageId]
     let ins = 'docker exec ' + container + ' ' + compiler
 
-    console.log( ins )
+    //console.log( ins )
     exec(ins, (error, stdout, stderr) => {
       if (error) {
         console.log(error)
@@ -93,7 +90,6 @@ class Sandbox {
         return
       }
       exec('docker exec ' + container + ' /files/' + this.folder + '/' + this.runner + '  ' + this.timeLimit, (error, stdout, stderr) => {
-        console.log( ' /files/' + this.folder + '/' + this.runner + '  ' + this.timeLimit )
         console.log(error)
         console.log(stderr)
         let ans = stdout.split('\n')[0]

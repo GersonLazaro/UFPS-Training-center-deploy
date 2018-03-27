@@ -284,11 +284,11 @@ function hasPermission ( user, syllabus_id, cb ){
             },
             attributes: ['id']
         }).then( response => {
-            if( !response ) cb( null, false )
-            cb( null, true )
+            if( !response ) return cb( null, false )
+            return cb( null, true )
         })
         .catch( (err) => {
-            cb( err, null )
+            return cb( err, null )
         })
     }else{
         SyllabusStudent.findOne({
@@ -298,11 +298,11 @@ function hasPermission ( user, syllabus_id, cb ){
             },
             attributes: ['id']
         }).then( response => {
-            if( !response ) cb( null, false )
-            cb( null, true )
+            if( !response ) return cb( null, false )
+            return cb( null, true )
         })
         .catch( (err) => {
-            cb( err, null )
+            return cb( err, null )
         })
     }
 }

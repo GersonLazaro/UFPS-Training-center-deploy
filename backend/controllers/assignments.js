@@ -87,9 +87,8 @@ function get(req, res) {
         	{
                 model: Problem,
                 as: 'problems',
-                attributes: ['id', 'title_es', 'title_en', 'level', 'description_en', 'description_es',
-                'example_input', 'example_output', 'category_id', 'time_limit'],
-                through: { attributes: [] }
+                attributes: ['id', 'title_es', 'title_en', 'level', 'category_id', 'time_limit'],
+                through: { attributes: ['id'] }
         	} 
         ],
         attributes: ['id', 'tittle', 'init_date', 'description', 'end_date', 'syllabus_id']
@@ -151,10 +150,11 @@ function isOwner ( user, assignment_id, cb ){
         },
         attributes: ['id']
     }).then( response => {
-        if( !response ) cb( null, false )
-        cb( null, true )
+        if( !response )
+            return cb( null, false )
+        return cb( null, true )
     }).catch( (err) => {
-        cb( err, null )
+        return cb( err, null )
     })
 }
 

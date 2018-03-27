@@ -37,7 +37,4 @@ problems.get('/:id', auth.isAuth, problemsCtrl.get )
 problems.post('/:id/submit', auth.isAuth, submissionUpload, problemsCtrl.submit )
 problems.get('/', auth.isAuth, problemsCtrl.list )
 
-
-problems.post('/prueba-calificador', problemsCtrl.integrationTest )
-
 module.exports = problems;
