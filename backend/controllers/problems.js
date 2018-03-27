@@ -256,6 +256,35 @@ function submit(req, res) {
 
     if( !req.files['code'] || !req.body.language )
         return res.status(400).send({ error: 'Datos incompletos' })
+    
+    req.body.user_id = req.user.sub
+    req.body.problem_id = req.params.id
+    req.body.file_name = req.files['code'][0].filename
+    req.body.file_path = req.files['code'][0].path
+    req.body.status = 'in queue'
+
+    let isContest = false
+    if( req.body.contest_problem_id ) isContest = true
+
+    Submission.create( req.body )
+        .then(submission => {
+            Grader.judge( submission.id, isContest )
+            return res.status(200).send(submission)
+        })
+        .catch(error => {
+            error = _.omit(error, ['parent', 'original', 'sql'])
+            return res.status(400).send(error)
+        })
+}
+
+function submitAssignment(req, res) {
+    if (req.user.usertype == 2)
+        return res.status(401).send({ error: 'No se encuentra autorizado' })
+
+    req.body = req.body.data
+
+    if( !req.files['code'] || !req.body.language )
+        return res.status(400).send({ error: 'Datos incompletos' })
 
     req.body.user_id = req.user.sub
     req.body.problem_id = req.params.id

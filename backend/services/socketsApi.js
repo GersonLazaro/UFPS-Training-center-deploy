@@ -15,76 +15,28 @@ contest.on('connection', function(socket) {
 })
 
 platform.on('connection', function(socket){
-    console.log('***********************************************'
-                +'**********************************************'
-                +'**********************************************'
-                +'**********************************************'
-                +'**********************************************'
-                +'                   CONEXIÓN                   '
-                +'**********************************************'
-                +'**********************************************'
-                +'**********************************************'
-                +'**********************************************'
-            )
     socket.on('register', function( user_id ){
-        console.log('***********************************************'
-                +'**********************************************'
-                +'**********************************************'
-                +'**********************************************'
-                +'**********************************************'
-                +'                   REGISTRO                   '
-                +'**********************************************'
-                +'**********************************************'
-                +'**********************************************'
-                +'**********************************************'
-            )
         addSocket( user_id, socket.id )
-        console.log( 'Socket REGISTRO: ' + socket.id )
     })
     console.log('User in normal mode')
 });
 
-socketApi.notifySubmissionResult = function( user_id, problem_id, verdict, problem_name ){
-    console.log('***********************************************'
-                +'**********************************************'
-                +'**********************************************'
-                +'**********************************************'
-                +'**********************************************'
-                +'                   SUBMISSION                 '
-                +'**********************************************'
-                +'**********************************************'
-                +'**********************************************'
-                +'**********************************************'
-            )
+socketApi.notifySubmissionResult = function( user_id, problem_id, verdict ){
     getSocket( user_id, ( socket_id ) => {
-        console.log( 'Socket ENVIO: ' + socket_id )
         platform.to(socket_id).emit('new result',{
             user_id: user_id,
             problem_id: problem_id,
-            verdict: verdict,
-            problem_name: problem_name
+            verdict: verdict
         })
     })
 }
 
-socketApi.refreshScoreboard = function( user_id, problem_id, verdict, submission_id, problem_name ){
-    console.log('***********************************************'
-                +'**********************************************'
-                +'**********************************************'
-                +'**********************************************'
-                +'**********************************************'
-                +'                   CONTEST                    '
-                +'**********************************************'
-                +'**********************************************'
-                +'**********************************************'
-                +'**********************************************'
-            )
+socketApi.refreshScoreboard = function( user_id, problem_id, verdict, submission_id ){
     contest.emit('new submission', {
         user_id: user_id,
         problem_id: problem_id,
         verdict: verdict,
-        submission_id: submission_id, 
-        problem_name: problem_name
+        submission_id: submission_id
     })
 }
 
@@ -94,22 +46,15 @@ function addSocket( user_id, socket_id ){
         { where: { id: user_id } }
     ).then((affectedRows) => {
     }).catch((err) => {
-        console.log('ERRROOOOOOOR: ' + err)
     })
 }
 
 function getSocket( user_id, success ){
-    console.log( user_id )
     User.findById( user_id )
     .then( (user) => {
-        console.log( user )
-        console.log( user.socket_id )
         success( user.socket_id )
     })
-    .catch( (err) => {
-        console.log("Heyyy i'm an error")
-        console.log( err )
-    })
+    .catch( (err) => {})
 }
 
 module.exports = socketApi;
