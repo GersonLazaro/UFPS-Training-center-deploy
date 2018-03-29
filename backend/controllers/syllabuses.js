@@ -307,8 +307,6 @@ function hasPermission ( user, syllabus_id, cb ){
     }
 }
 
-
-
 module.exports = {
     create,
     get,

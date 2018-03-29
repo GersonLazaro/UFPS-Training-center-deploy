@@ -3,6 +3,7 @@
 const User = require('../models').users
 const Submissions = require('../models').submissions
 const Syllabus = require('../models').syllabuses
+const Problems = require('../models').problems
 const authService = require('../services/authenticationService')
 const _ = require('lodash');
 
@@ -163,11 +164,67 @@ function getSyllabus (req,res){
   })
 }
 
+function getSubmissions (req,res){
+  if ( req.params.id !== req.user.sub ) 
+    return res.status(401).send({ error: 'No se encuentra autorizado' })
+  
+  if( !req.query.page )
+    return res.status(400).send({ error: 'Datos incompletos' })  
+
+  let limit = (req.query.limit) ? parseInt(req.query.limit) : 10
+  let order = []
+  let offset = (req.query.page) ? limit * ( parseInt(req.query.page) - 1 ) : 0
+  let by = (req.query.by) ? req.query.by : 'DESC'
+  
+  let condition = {}
+  let meta = {}
+
+  order[0] = ['created_at', by]
+
+  if (req.query.sort) {
+    if (req.query.sort == 'time') order[0] = ['execution_time', by]
+    else if ( req.query.sort == 'level' ) order[0] = [ Problems, 'level', by ]
+  }
+
+  if( req.query.condition ){
+    if( req.query.condition == 'WA') condition.verdict = 'Wrong Answer'
+    else if( req.query.condition == 'TL') condition.verdict = 'Time Limit Exceeded'
+    else if( req.query.condition == 'RT') condition.verdict = 'Runtime Error'
+    else if( req.query.condition == 'CE') condition.verdict = 'Compilation Error'
+    else condition.verdict = 'Accepted'
+  }else{
+    condition.id = { $ne: null }
+  }
+
+  Submissions.findAndCountAll({
+    where: condition,
+    include: [ 
+      { model: Problems, attributes: ['title_en', 'id', 'title_es', 'level'] }
+    ],
+    attributes: ['id', 'file_name', 'file_path', 'language', 'execution_time', 'verdict', 'status', 'created_at'],
+    limit: limit,
+    order: order,
+    offset: offset,
+  })
+  .then((response) => {
+    meta.totalPages = Math.ceil( response.count / limit )
+    meta.totalItems = response.count
+        
+    if ( offset >= response.count ) 
+      return res.status(200).send( { meta } )
+    return res.status(200).send({ meta: meta, data: response.rows })
+  })
+  .catch((err) => {
+    return res.status(500).send({ error: `${err}` })
+  })
+}
+
 module.exports = {
   index,
   register,
   signUp,
   recovery,
   getSyllabus,
-  removeAccounts
+  removeAccounts,
+  getSubmissions
 }
