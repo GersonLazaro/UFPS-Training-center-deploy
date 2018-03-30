@@ -176,7 +176,9 @@ function getSubmissions (req,res){
   let offset = (req.query.page) ? limit * ( parseInt(req.query.page) - 1 ) : 0
   let by = (req.query.by) ? req.query.by : 'DESC'
   
-  let condition = {}
+  let condition = {
+    user_id: req.params.id
+  }
   let meta = {}
 
   order[0] = ['created_at', by]
@@ -192,8 +194,6 @@ function getSubmissions (req,res){
     else if( req.query.condition == 'RT') condition.verdict = 'Runtime Error'
     else if( req.query.condition == 'CE') condition.verdict = 'Compilation Error'
     else condition.verdict = 'Accepted'
-  }else{
-    condition.id = { $ne: null }
   }
 
   Submissions.findAndCountAll({
