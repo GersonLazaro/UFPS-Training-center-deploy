@@ -1,6 +1,7 @@
 'use strict'
 
 const Assignment = require('../models').assignments
+const Submissions = require('../models').submissions
 const SyllabusStudents = require('../models').syllabus_students
 const Syllabus = require('../models').syllabuses
 const Problem = require('../models').problems
@@ -138,6 +139,54 @@ function deleteProblems (req,res){
     })
 }
 
+function getSubmissions (req,res){
+    if( !req.query.page )
+      return res.status(400).send({ error: 'Datos incompletos' })  
+
+    isOwner( req.user, req.params.id, (err, ans) =>{
+        let limit = (req.query.limit) ? parseInt(req.query.limit) : 10
+        let order = []
+        let offset = (req.query.page) ? limit * ( parseInt(req.query.page) - 1 ) : 0
+        let by = (req.query.by) ? req.query.by : 'DESC'
+
+        let condition = {
+            assignment_problem_id: req.params.pid
+        }
+        let meta = {}
+        order[0] = ['created_at', by]
+
+        if (req.query.sort && req.query.sort == 'time' ) 
+            order[0] = ['execution_time', by]
+
+        if( req.query.condition ){
+            if( req.query.condition == 'WA') condition.verdict = 'Wrong Answer'
+            else if( req.query.condition == 'TL') condition.verdict = 'Time Limit Exceeded'
+            else if( req.query.condition == 'RT') condition.verdict = 'Runtime Error'
+            else if( req.query.condition == 'CE') condition.verdict = 'Compilation Error'
+            else condition.verdict = 'Accepted'
+        }
+
+        Submissions.findAndCountAll({
+            where: condition,
+            attributes: ['id', 'file_name', 'file_path', 'language', 'execution_time', 'verdict', 'status', 'created_at'],
+            limit: limit,
+            order: order,
+            offset: offset,
+        })
+        .then((response) => {
+            meta.totalPages = Math.ceil( response.count / limit )
+            meta.totalItems = response.count
+
+            if ( offset >= response.count ) 
+              return res.status(200).send( { meta } )
+            return res.status(200).send({ meta: meta, data: response.rows })
+        })
+        .catch((err) => {
+            return res.status(500).send({ error: `${err}` })
+        })
+    })
+}
+
 function isOwner ( user, assignment_id, cb ){
     Assignment.findOne({
         include: [{ 
@@ -165,5 +214,6 @@ module.exports = {
     update,
     addProblems,
     deleteProblems,
+    getSubmissions,
     isOwner
 }

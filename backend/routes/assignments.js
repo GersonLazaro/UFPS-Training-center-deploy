@@ -17,5 +17,6 @@ Assignments.get('/:id', auth.isAuth, assignmentsCtrl.get )
 Assignments.post('/:id/add-problems', auth.isAuth, assignmentsCtrl.addProblems )
 Assignments.post('/:id/remove-problems', auth.isAuth, assignmentsCtrl.deleteProblems )
 Assignments.get('/:id/results', auth.isAuth, statisticsCtrl.getAssignmentResult )
+Assignments.get('/:id/submissions/:pid', auth.isAuth, assignmentsCtrl.getSubmissions )
 
 module.exports = Assignments;
