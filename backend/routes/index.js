@@ -10,6 +10,7 @@ const materials = require('../routes/materials')
 const syllabuses = require('../routes/syllabuses')
 const assignments = require('../routes/assignments')
 const contests = require('../routes/contests')
+const submissions = require('../routes/submissions')
 
 const auth = require('../middlewares/auth')
 const authCtrl = require('../controllers/auth')
@@ -26,6 +27,7 @@ router.use('/materials', materials)
 router.use('/syllabus', syllabuses)
 router.use('/assignments', assignments)
 router.use('/contests', contests)
+router.use('/submissions', submissions)
 
 /* GET home page. */
 router.get('/', function(req, res, next) {

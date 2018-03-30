@@ -5,6 +5,7 @@ const Submissions = require('../models').submissions
 const Syllabus = require('../models').syllabuses
 const Problems = require('../models').problems
 const authService = require('../services/authenticationService')
+const path = require('path')
 const _ = require('lodash');
 
 /**
@@ -219,6 +220,10 @@ function getSubmissions (req,res){
   })
 }
 
+function getSubmission(req,res){
+  return res.sendFile( path.join( path.dirname(__dirname), 'files', 'codes', req.params.submission ) )
+}
+
 module.exports = {
   index,
   register,
@@ -226,5 +231,6 @@ module.exports = {
   recovery,
   getSyllabus,
   removeAccounts,
-  getSubmissions
+  getSubmissions,
+  getSubmission
 }
