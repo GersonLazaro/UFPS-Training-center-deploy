@@ -168,7 +168,7 @@ function getSubmissions (req,res){
 
         Submissions.findAndCountAll({
             where: condition,
-            attributes: ['id', 'file_name', 'file_path', 'language', 'execution_time', 'verdict', 'status', 'created_at'],
+            attributes: ['id', 'language', 'execution_time', 'verdict', 'status', 'created_at'],
             limit: limit,
             order: order,
             offset: offset,

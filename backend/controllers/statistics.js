@@ -160,23 +160,33 @@ function getAssignmentProbVerdicts(req, res) {
 
     if( !ans )
       return res.status(401).send({ error: 'No se encuentra autorizado' })
-    
+
     sequelize.query(
-      'SELECT u.id, u.username, u.code, u.name, solved_problems.assignment_problem_id, solved_problems.problem_id  '
-      +'FROM syllabus_students ss LEFT JOIN '
-      +'( SELECT s.user_id, s.assignment_problem_id, s.problem_id '
-        +'FROM submissions s, assignment_problems ap '
-        +'WHERE s.assignment_problem_id = ap.id '
-        +'AND ap.assignment_id = ' + req.params.id + ' '
-        +'AND s.verdict = "Accepted" '
-        +'GROUP BY s.user_id, s.assignment_problem_id '
-      +') as solved_problems '
-      +'ON solved_problems.user_id = ss.user_id, '
-      +'users u, assignments a '
-      +'WHERE ss.user_id = u.id '
-      +'AND ss.syllabus_id = a.syllabus_id '
-      +'AND  a.id = ' + req.params.id + ' '
-      +'ORDER BY u.id DESC '
+      'SELECT s.verdict, COUNT(s.id) AS total '
+      +'FROM submissions s '
+      +'WHERE s.assignment_problem_id = ' + req.params.pid + ' '
+      +'GROUP BY s.verdict '
+    ).then( ranking => {
+      return res.status(200).send( ranking[0] )
+    }).catch(error => {
+      return res.status(500).send(error)
+    })
+  })
+}
+
+function getAssignmentProbLanguages(req, res) {
+  assignmentsCtrl.isOwner( req.user, req.params.id, (err, ans) =>{
+    if( err )
+      return res.status(500).send(err)
+
+    if( !ans )
+      return res.status(401).send({ error: 'No se encuentra autorizado' })
+
+    sequelize.query(
+      'SELECT s.language, COUNT(s.id) AS total '
+      +'FROM submissions s '
+      +'WHERE s.assignment_problem_id = ' + req.params.pid + ' '
+      +'GROUP BY s.language '
     ).then( ranking => {
       return res.status(200).send( ranking[0] )
     }).catch(error => {
@@ -188,5 +198,7 @@ function getAssignmentProbVerdicts(req, res) {
 module.exports = {
   getRanking,
   getSyllabusRanking,
-  getAssignmentResult
+  getAssignmentResult,
+  getAssignmentProbVerdicts,
+  getAssignmentProbLanguages
 }
