@@ -128,26 +128,40 @@ function getAssignmentResult(req, res) {
 
     if( !ans )
       return res.status(401).send({ error: 'No se encuentra autorizado' })
-    
+
     sequelize.query(
-      'SELECT u.id, u.username, u.code, u.name, solved_problems.assignment_problem_id, solved_problems.problem_id  '
-      +'FROM syllabus_students ss LEFT JOIN '
-      +'( SELECT s.user_id, s.assignment_problem_id, s.problem_id '
+      'SELECT u.id, u.code, u.username, u.name '
+      +'FROM users u, syllabus_students ss, assignments a '
+      +'WHERE u.id = ss.user_id '
+      +'AND ss.syllabus_id = a.syllabus_id '
+      +'AND a.id = ' + req.params.id
+    ).then( users => {
+      let index = {}
+      let ans = []
+      let i
+      for( i = 0; i < users[0].length; i++ ){
+        ans[i] = users[0][i]
+        ans[i].assignment_problems = []
+        index[ users[0][i].id ] = i
+      }
+      sequelize.query(
+        'SELECT s.user_id, s.assignment_problem_id '
         +'FROM submissions s, assignment_problems ap '
         +'WHERE s.assignment_problem_id = ap.id '
         +'AND ap.assignment_id = ' + req.params.id + ' '
         +'AND s.verdict = "Accepted" '
         +'GROUP BY s.user_id, s.assignment_problem_id '
-      +') as solved_problems '
-      +'ON solved_problems.user_id = ss.user_id, '
-      +'users u, assignments a '
-      +'WHERE ss.user_id = u.id '
-      +'AND ss.syllabus_id = a.syllabus_id '
-      +'AND  a.id = ' + req.params.id + ' '
-      +'ORDER BY u.id DESC '
-    ).then( ranking => {
-      return res.status(200).send( ranking[0] )
-    }).catch(error => {
+      ).then( submissions => {
+        let aux
+        for( i = 0; i < submissions[0].length; i++ ){
+          aux = index[ submissions[0][i].user_id ]
+          ans[ aux ].assignment_problems.push( submissions[0][i].assignment_problem_id )
+        }
+        return res.status(200).send( ans )
+      }).catch( error => {
+        return res.status(500).send(error)
+      })
+    }).catch( error => {
       return res.status(500).send(error)
     })
   })
