@@ -168,10 +168,16 @@ function getSubmissions (req,res){
 
         Submissions.findAndCountAll({
             where: condition,
-            attributes: ['id', 'language', 'execution_time', 'verdict', 'status', 'created_at'],
+            attributes: ['id', 'language', 'file_name', 'execution_time', 'verdict', 'status', 'created_at'],
             limit: limit,
             order: order,
             offset: offset,
+            include: [ 
+                { 
+                    model: User, 
+                    attributes: ['name', 'username'] 
+                }
+            ]
         })
         .then((response) => {
             meta.totalPages = Math.ceil( response.count / limit )

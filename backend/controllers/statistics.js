@@ -195,10 +195,44 @@ function getAssignmentProbLanguages(req, res) {
   })
 }
 
+function getLanguagesStatistic( req, res ){
+  if ( req.params.id != req.user.sub ) 
+    return res.status(401).send({ error: 'No se encuentra autorizado' })
+
+  sequelize.query(
+    'SELECT s.language, COUNT(s.id) AS total '
+    +'FROM submissions s '
+    +'WHERE s.user_id = ' + req.params.id + ' '
+    +'GROUP BY s.language '
+  ).then( ranking => {
+    return res.status(200).send( ranking[0] )
+  }).catch(error => {
+    return res.status(500).send(error)
+  })
+}
+
+function getVerdictsStatistic( req, res ){
+  if ( req.params.id != req.user.sub ) 
+    return res.status(401).send({ error: 'No se encuentra autorizado' })
+
+  sequelize.query(
+    'SELECT s.verdict, COUNT(s.id) AS total '
+    +'FROM submissions s '
+    +'WHERE s.user_id = ' + req.params.id + ' '
+    +'GROUP BY s.verdict '
+  ).then( ranking => {
+    return res.status(200).send( ranking[0] )
+  }).catch(error => {
+    return res.status(500).send(error)
+  })
+}
+
 module.exports = {
   getRanking,
   getSyllabusRanking,
   getAssignmentResult,
   getAssignmentProbVerdicts,
-  getAssignmentProbLanguages
+  getAssignmentProbLanguages,
+  getLanguagesStatistic,
+  getVerdictsStatistic
 }

@@ -17,5 +17,7 @@ users.get('/:id/syllabus', auth.isAuth, userCtrl.getSyllabus )
 users.get('/:id/submissions', auth.isAuth, userCtrl.getSubmissions )
 users.post('/remove-account', auth.isAuth, userCtrl.removeAccounts )
 users.get('/ranking', auth.isAuth, statisticsCtrl.getRanking )
+users.get('/:id/languages', auth.isAuth, statisticsCtrl.getLanguagesStatistic )
+users.get('/:id/verdicts', auth.isAuth, statisticsCtrl.getVerdictsStatistic )
 
 module.exports = users;

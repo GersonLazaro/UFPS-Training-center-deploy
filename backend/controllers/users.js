@@ -202,7 +202,7 @@ function getSubmissions (req,res){
     include: [ 
       { model: Problems, attributes: ['title_en', 'id', 'title_es', 'level'] }
     ],
-    attributes: ['id', 'language', 'execution_time', 'verdict', 'status', 'created_at'],
+    attributes: ['id', 'language', 'file_name', 'execution_time', 'verdict', 'status', 'created_at'],
     limit: limit,
     order: order,
     offset: offset,
