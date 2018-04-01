@@ -12,6 +12,7 @@ const auth = require('../middlewares/auth')
  */
 
 users.get('/', auth.isAuth, userCtrl.index )
+users.get('/:id', auth.isAuth, userCtrl.getUser )
 users.get('/:id/syllabus', auth.isAuth, userCtrl.getSyllabus )
 users.get('/:id/submissions', auth.isAuth, userCtrl.getSubmissions )
 users.get('/ranking', auth.isAuth, statisticsCtrl.getRanking )

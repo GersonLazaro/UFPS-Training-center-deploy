@@ -143,9 +143,6 @@ function remove(req, res) {
     })
 }
 
-function getScoreboard(req, res) {
-}
-
 function getProblems(req, res) {
     Contest.findOne({
         where: {id : req.params.id },
@@ -353,17 +350,42 @@ function isRegister (req,res){
     })
 }
 
+function hasPermission ( user_id, contest_id, cb ){
+    Contest.findOne({
+        where: {id : contest_id }
+   }).then( (contest) => {
+       if( contest.public ) return cb( null, true )
+       if( contest.user_id == user_id ) return cb( null, true )
+
+       ContestStudent.findOne({
+            where: {
+                contest_id: contest_id,
+                user_id: user_id
+            },
+            attributes: ['id']
+        }).then( response => {
+            if( !response ) return cb( null, false )
+            return cb( null, true )
+        })
+        .catch( (err) => {
+            return cb( err, null )
+        })
+   }).catch( (err) => {
+        return cb( err, null )
+   })
+}
+
 module.exports = {
     create,
     index,
     list,
     update,
     remove,
-    getScoreboard,
     getProblems,
     addProblems,
     removeProblems,
     registerStudent,
     removeStudent,
-    isRegister
+    isRegister,
+    hasPermission
 }

@@ -108,6 +108,19 @@ function signUp(req, res) {
     })
 }
 
+function getUser(req,res){
+  User.findOne({
+    where: {
+        id: req.params.id
+      },
+    attributes: ['id', 'name', 'email', 'code', 'username', 'created_at']
+  }).then(function (user) {
+    return res.status(200).send( user )
+  }).catch(function (err) {
+    return res.sendStatus(500)
+  })
+}
+
 /**
  * Updates the user's password
  * @param {any} req
@@ -293,5 +306,6 @@ module.exports = {
   getSyllabus,
   removeAccounts,
   getSubmissions,
-  getSubmission
+  getSubmission,
+  getUser
 }

@@ -7,6 +7,7 @@ const Sequelize = require('sequelize')
 const sequelize = new Sequelize( config.url, config )
 const syllabusesCtrl = require('../controllers/syllabuses')
 const assignmentsCtrl = require('../controllers/assignments')
+const contestsCtrl = require('../controllers/contests')
 
 /**
  * Statistics controller 
@@ -34,7 +35,7 @@ function getRanking(req, res) {
         return res.status(200).send( { meta } )
       
       sequelize.query(
-        'SELECT u.username, COUNT(s.problem_id) as total, '
+        'SELECT u.username, u.name, COUNT(s.problem_id) as total, '
         +'(SELECT COUNT( DISTINCT(problem_id) ) '
         +'FROM submissions '
         +'WHERE verdict="Accepted" '
@@ -85,7 +86,7 @@ function getSyllabusRanking(req, res) {
               return res.status(200).send( { meta } )
             
             sequelize.query(
-              'SELECT u.name, u.id, '
+              'SELECT u.name, u.username, u.id, '
               +'COUNT( syllabus_submissions.assignment_problem_id ) as total, '
               +'( '
                 +' SELECT COUNT( DISTINCT(s.assignment_problem_id) ) '
@@ -241,6 +242,54 @@ function getVerdictsStatistic( req, res ){
   })
 }
 
+function getContestScoreboard(req, res) {
+  contestsCtrl.hasPermission( req.user.sub, req.params.id, (err, ans) =>{
+    if( err )
+      return res.status(500).send(err)
+
+    if( !ans )
+      return res.status(401).send({ error: 'No se encuentra autorizado' })
+
+    sequelize.query(
+      'SELECT u.id, u.code, u.username, u.name '
+      +'FROM users u, contests_students cs '
+      +'WHERE u.id = cs.user_id '
+      +'AND cs.contest_id = ' + req.params.id
+    ).then( users => {
+      let index = {}
+      let ans = []
+      let i
+      for( i = 0; i < users[0].length; i++ ){
+        ans[i] = users[0][i]
+        ans[i].submissions = []
+        ans[i].total_accepted = 0
+        ans[i].total_time = 0
+        ans[i].penalizes = 0
+        index[ users[0][i].id ] = i
+      }
+      sequelize.query(
+        'SELECT s.user_id, s.assignment_problem_id '
+        +'FROM submissions s, assignment_problems ap '
+        +'WHERE s.assignment_problem_id = ap.id '
+        +'AND ap.assignment_id = ' + req.params.id + ' '
+        +'AND s.verdict = "Accepted" '
+        +'GROUP BY s.user_id, s.assignment_problem_id '
+      ).then( submissions => {
+        let aux
+        for( i = 0; i < submissions[0].length; i++ ){
+          aux = index[ submissions[0][i].user_id ]
+          ans[ aux ].assignment_problems.push( submissions[0][i].assignment_problem_id )
+        }
+        return res.status(200).send( ans )
+      }).catch( error => {
+        return res.status(500).send(error)
+      })
+    }).catch( error => {
+      return res.status(500).send(error)
+    })
+  })
+}
+
 module.exports = {
   getRanking,
   getSyllabusRanking,
@@ -248,5 +297,6 @@ module.exports = {
   getAssignmentProbVerdicts,
   getAssignmentProbLanguages,
   getLanguagesStatistic,
-  getVerdictsStatistic
+  getVerdictsStatistic,
+  getContestScoreboard
 }

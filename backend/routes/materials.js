@@ -21,12 +21,11 @@ var materialUpload = upload.fields([
  */
 
 materials.get('/', materialsCtrl.index )
-materials.post('/', auth.isAuth, materialUpload, materialsCtrl.create )
-materials.delete('/:id', auth.isAuth, materialsCtrl.remove )
 materials.get('/pending', auth.isAuth, materialsCtrl.pending )
 materials.get('/:id', materialsCtrl.get )
-materials.patch('/:id', auth.isAuth, materialsCtrl.approve )
+materials.post('/', auth.isAuth, materialUpload, materialsCtrl.create )
 materials.put('/:id', auth.isAuth, materialUpload, materialsCtrl.update )
-
+materials.delete('/:id', auth.isAuth, materialsCtrl.remove )
+materials.patch('/:id', auth.isAuth, materialsCtrl.approve )
 
 module.exports = materials;
