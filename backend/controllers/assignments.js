@@ -4,6 +4,7 @@ const Assignment = require('../models').assignments
 const Submissions = require('../models').submissions
 const SyllabusStudents = require('../models').syllabus_students
 const Syllabus = require('../models').syllabuses
+const User = require('../models').users
 const Problem = require('../models').problems
 const _ = require('lodash')
 
