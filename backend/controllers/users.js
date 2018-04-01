@@ -142,6 +142,64 @@ function recovery(req, res) {
   })
 }
 
+function update(req, res) {
+  if ( req.params.id != req.user.sub )
+    return res.status(401).send({ error: 'No se encuentra autorizado' })
+
+  if( !req.body.name || !req.body.email || !req.body.username )
+      return res.status(400).send({ error: 'Datos incompletos' })
+
+  let condition = {
+      id: req.params.id
+  }
+
+  User.update(
+      req.body,
+      {
+          where: condition
+      }
+  ).then( ( affectedRows ) => {
+      if ( affectedRows > 0 ) return res.status(200).send(req.body)
+      return res.status(401).send({ error: 'No se encuentra autorizado' })
+  }).catch((err) => {
+      return res.sendStatus(500)
+  })
+}
+
+function changePassword(req,res){
+  if ( req.params.id != req.user.sub )
+    return res.status(401).send({ error: 'No se encuentra autorizado' })
+
+  if( !req.body.password || !req.body.confirm_password || !req.body.old_password )
+    return res.status(400).send({ error: 'Datos incompletos' })
+
+  User.findOne({
+    where: {
+        id: req.params.id
+      }
+  }).then(function (user) {
+    if( user.authenticate(req.body.old_password) ){
+      User.update(
+        req.body,
+        {
+          where: { id: req.params.id },
+          fields: ['password', 'confirm_password'],
+          individualHooks: true
+        }
+      ).then( ( affectedRows ) => {
+        if (affectedRows) return res.sendStatus(200)
+
+        return res.status(400).send({ error: 'Datos incorrectos' })
+      }).catch((err) => {
+          return res.status(400).send( {error: "Error, las contraseñas no coinciden"} )
+      })
+    } else
+      res.status(401).send({ error: 'Contraseña incorrecta' })
+  }).catch(function (err) {
+    return res.sendStatus(500)
+  })
+}
+
 function getSyllabus (req,res){
   User.findOne({
        where: {id : req.params.id },
@@ -224,11 +282,14 @@ function getSubmission(req,res){
   return res.sendFile( path.join( path.dirname(__dirname), 'files', 'codes', req.params.submission ) )
 }
 
+
 module.exports = {
   index,
   register,
   signUp,
   recovery,
+  changePassword,
+  update,
   getSyllabus,
   removeAccounts,
   getSubmissions,
