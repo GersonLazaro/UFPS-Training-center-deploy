@@ -58,8 +58,7 @@ function judge( submission_id, contest ) {
                         updateStatus( submission_id, ans )
                         //user, problem, verdict, sumission_id
                         if( contest ) socket.refreshScoreboard( data.user_id, data.problem_id, ans.verdict, submission_id, data.problem_title )
-                        //user, problem, verdict
-                        else socket.notifySubmissionResult( data.user_id, data.problem_id, ans.verdict, data.problem_title )
+                        socket.notifySubmissionResult( data.user_id, data.problem_id, ans.verdict, data.problem_title )
                     })
                 }
                 console.log( "************** CONTENEDOR NO EN EJECUCION **********")
