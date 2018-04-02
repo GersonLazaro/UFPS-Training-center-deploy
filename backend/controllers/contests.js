@@ -151,7 +151,7 @@ function getProblems(req, res) {
                model: Problem, 
                as: 'problems',
                attributes: ['id', 'title_es', 'title_en', 'level'],
-               through: { attributes: [] }
+               through: { attributes: ['id'] }
            } 
        ]
    }).then( (contest) => {
