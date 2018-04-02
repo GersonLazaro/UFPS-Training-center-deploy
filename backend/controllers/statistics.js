@@ -8,6 +8,7 @@ const sequelize = new Sequelize( config.url, config )
 const syllabusesCtrl = require('../controllers/syllabuses')
 const assignmentsCtrl = require('../controllers/assignments')
 const contestsCtrl = require('../controllers/contests')
+const moment = require('moment')
 
 /**
  * Statistics controller 
@@ -251,34 +252,66 @@ function getContestScoreboard(req, res) {
       return res.status(401).send({ error: 'No se encuentra autorizado' })
 
     sequelize.query(
-      'SELECT u.id, u.code, u.username, u.name '
-      +'FROM users u, contests_students cs '
+      'SELECT u.id, u.code, u.username, u.name, c.init_date '
+      +'FROM users u, contests_students cs, contests c '
       +'WHERE u.id = cs.user_id '
-      +'AND cs.contest_id = ' + req.params.id
+      +'AND cs.contest_id = ' + req.params.id + ' '
+      +'AND c.id = ' + req.params.id
     ).then( users => {
       let index = {}
       let ans = []
       let i
+      let init_date = moment( users[0][0].init_date )
+
       for( i = 0; i < users[0].length; i++ ){
         ans[i] = users[0][i]
-        ans[i].submissions = []
+        ans[i].problems = {}
         ans[i].total_accepted = 0
         ans[i].total_time = 0
-        ans[i].penalizes = 0
         index[ users[0][i].id ] = i
       }
       sequelize.query(
-        'SELECT s.user_id, s.assignment_problem_id '
-        +'FROM submissions s, assignment_problems ap '
-        +'WHERE s.assignment_problem_id = ap.id '
-        +'AND ap.assignment_id = ' + req.params.id + ' '
-        +'AND s.verdict = "Accepted" '
-        +'GROUP BY s.user_id, s.assignment_problem_id '
+        'SELECT s.user_id, s.contest_problem_id, s.verdict, s.created_at, s.id '
+        +'FROM submissions s, contests_problems cp '
+        +'WHERE s.contest_problem_id = cp.id '
+        +'AND cp.contest_id = ' + req.params.id + ' '
+        +'ORDER BY s.created_at ASC'
       ).then( submissions => {
-        let aux
+        let aux, minutes, sub_date, sub_data, problem_id, cp_data
+
         for( i = 0; i < submissions[0].length; i++ ){
           aux = index[ submissions[0][i].user_id ]
-          ans[ aux ].assignment_problems.push( submissions[0][i].assignment_problem_id )
+          sub_date = moment( submissions[0][i].created_at )
+          minutes = sub_date.diff( init_date, 'minutes' )
+          problem_id = submissions[0][i].contest_problem_id
+
+          sub_data = {
+            submission_id: submissions[0][i].id,
+            submission_minute: minutes,
+            submission_verdict: submissions[0][i].verdict
+          }
+
+          if( !ans[aux].problems[ problem_id ] ){
+            cp_data = {
+              errors: 0,
+              accepted: false,
+              min_accepted: 0,
+              submissions: []
+            }
+            ans[aux].problems[ problem_id ] = cp_data
+          }
+
+          if( submissions[0][i].verdict != 'Accepted' && !ans[aux].problems[ problem_id ].accepted )
+            ans[aux].problems[ problem_id ].errors++
+
+          if( submissions[0][i].verdict == 'Accepted' && !ans[aux].problems[ problem_id ].accepted ){
+            ans[ aux ].total_accepted++
+            ans[aux].problems[ problem_id ].accepted = true
+            ans[aux].problems[ problem_id ].min_accepted = minutes
+            ans[ aux ].total_time += minutes + ( ans[aux].problems[ problem_id ].errors * 20 )
+          }
+
+          ans[aux].problems[ problem_id ].submissions.push( sub_data )
         }
         return res.status(200).send( ans )
       }).catch( error => {
