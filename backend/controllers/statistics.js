@@ -285,18 +285,18 @@ function getContestScoreboard(req, res) {
           minutes = sub_date.diff( init_date, 'minutes' )
           problem_id = submissions[0][i].contest_problem_id
 
-          sub_data = {
+          /*sub_data = {
             submission_id: submissions[0][i].id,
             submission_minute: minutes,
             submission_verdict: submissions[0][i].verdict
-          }
+          }*/
 
           if( !ans[aux].problems[ problem_id ] ){
             cp_data = {
               errors: 0,
               accepted: false,
               min_accepted: 0,
-              submissions: []
+              //submissions: []
             }
             ans[aux].problems[ problem_id ] = cp_data
           }
@@ -311,7 +311,7 @@ function getContestScoreboard(req, res) {
             ans[ aux ].total_time += minutes + ( ans[aux].problems[ problem_id ].errors * 20 )
           }
 
-          ans[aux].problems[ problem_id ].submissions.push( sub_data )
+          //ans[aux].problems[ problem_id ].submissions.push( sub_data )
         }
         return res.status(200).send( ans )
       }).catch( error => {
