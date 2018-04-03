@@ -57,7 +57,7 @@ function judge( submission_id, contest ) {
                         }
                         updateStatus( submission_id, ans )
                         //user, problem, verdict, sumission_id
-                        if( contest ) socket.refreshScoreboard( data.user_id, data.problem_id, ans.verdict, submission_id, data.problem_title )
+                        if( contest ) socket.refreshScoreboard( data.user_id, data.problem_id, ans.verdict, submission_id, data.problem_title, data.created_at )
                         socket.notifySubmissionResult( data.user_id, data.problem_id, ans.verdict, data.problem_title )
                     })
                 }
@@ -70,14 +70,15 @@ function judge( submission_id, contest ) {
 function getSubmissionData( submission_id, cb ){
     Submission.findOne({
         where: { id: submission_id },
-        attributes: ['problem_id', 'file_name', 'file_path', 'language', 'user_id']
+        attributes: ['problem_id', 'file_name', 'file_path', 'language', 'user_id', 'created_at']
     }).then( ( submission ) =>{
         let data = {
             problem_id: submission.problem_id,
             file_name: submission.file_name,
             file_path: submission.file_path,
             language: submission.language,
-            user_id: submission.user_id
+            user_id: submission.user_id,
+            created_at: submission.created_at
         }
         cb( data )
     }).catch( (err) => {
