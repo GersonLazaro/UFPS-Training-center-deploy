@@ -42,7 +42,7 @@ socketApi.notifySubmissionResult = function( user_id, problem_id, verdict, probl
     })
 }
 
-socketApi.refreshScoreboard = function( user_id, problem_id, verdict, submission_id, problem_name ){
+socketApi.refreshScoreboard = function( user_id, problem_id, verdict, submission_id, problem_name, created_at ){
     console.log('***********************************************'
                 +'**********************************************'
                 +'**********************************************'
@@ -59,7 +59,8 @@ socketApi.refreshScoreboard = function( user_id, problem_id, verdict, submission
         problem_id: problem_id,
         verdict: verdict,
         submission_id: submission_id, 
-        problem_name: problem_name
+        problem_name: problem_name,
+        created_at: created_at
     })
 }
 
